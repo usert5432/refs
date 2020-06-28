@@ -1,0 +1,171 @@
+.TH REFS 1 refs-VERSION
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:NAME
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH NAME
+refs \- quick notes manager.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:SYNOPSIS
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH SYNOPSIS
+.B refs
+.RB [ OPTION... ]
+.B COMMAND
+.RB [ ARGUMENT... ]
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:DESCRIPTION
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH DESCRIPTION
+.B refs
+is a tiny program to manage quick user notes. The user notes are kept in the
+.I ~/.refs
+directory as plain text files with unique names. Once created the notes can be
+listed, grepped and modified with
+.B refs
+or using any other application.
+.P
+.B refs
+supports multiple commands to work with user notes. These commands are are
+described in the
+.B COMMANDS
+section below.
+.P
+.B refs
+expects each user note to have a short single line descriptive header on top
+(for easy search later) and a main body. However, this structure is not
+strictly imposed.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:COMMANDS
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH COMMANDS
+The commands listed below that accept
+.I NOTE
+argument can either take a note file name as a
+.I NOTE
+argument or a
+.I NOTE
+numerical ID returned by either
+.BR list " or " grep
+commands.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.B add
+Add a new note. An editor defined by an
+.I EDITOR
+environment variable will be opened for user to enter the contents of a new
+note.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.BI cat " NOTE"
+Print contents of the note
+.IR NOTE .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.BI copy " NOTE DST"
+.RI "Copy " NOTE " to " DST .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.BI count
+Count number of available notes.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.BI edit " NOTE"
+.RI "Run editor defined by an " EDITOR " environment variable to edit the note"
+.IR NOTE .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.BI grep " GREP_ARG..."
+Run
+.B grep
+command over available notes with arguments specified by
+.IR GREP_ARG .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.BI less " NOTE"
+.RI "View " NOTE " in a pager specified by the " PAGER " environment variable
+.RB "(usually " less " or " more ).
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.B list
+Print detailed list of available notes with their headers.
+.TP
+.BI move " NOTE DST"
+.RI "Move " NOTE " to " DST .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.TP
+.BI remove " NOTE"
+.RI "Delete " NOTE .
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:OPTIONS
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Print usage and exit.
+.TP
+.BR \-d ", " \-\-dir " " "\fIDIR"
+Set notes directory to
+.IR DIR .
+The environment variable
+.I REFS_DIR
+can be used for the same purpose.
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\" Section:EXAMPLES
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.SH EXAMPLES
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.B Create a note with the default editor
+.nf
+.RS
+$ refs \fBadd\fR
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B Create another note from stdin
+.nf
+.RS
+$ echo "SECOND NOTE" | env EDITOR=tee refs \fBadd\fR
+SECOND NOTE
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B List notes
+.nf
+.RS
+$ refs \fBlist\fR
+[ 1 ] : 2020-01-01_00:00:01.4C8dBjNiR0 : FIRST NOTE
+[ 2 ] : 2020-01-01_00:00:02.aK5U263f7o : SECOND NOTE
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B Search notes
+.nf
+.RS
+$ refs \fBgrep \fISECOND\fR
+[ 2 ] : 2020-01-01_00:00:02.aK5U263f7o
+.IR SECOND " NOTE"
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B Print note contents by note name
+.nf
+.RS
+$ refs \fBcat \fI2020-06-12_13:47:31.aK5U263f7o\fR
+>>> ~/.refs/2020-01-01_00:00:02.aK5U263f7o :
+SECOND NOTE
+.RE
+.fi
+\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.P
+.B Print note contents by note ID
+.nf
+.RS
+$ refs \fBcat \fI2\fR
+>>> ~/.refs/2020-01-01_00:00:02.aK5U263f7o :
+SECOND NOTE
+.RE
+.fi
